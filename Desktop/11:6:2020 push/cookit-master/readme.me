@@ -1,0 +1,12 @@
+conda create -n cookit python=3.7
+conda activate cookit
+
+Delete peewee-db-evolve==3.7.0 from requirements.txt during the first installation. Because of how peewee-db-evolve created it's build process, we would first need to delete it.
+
+pip install -r requirements.txt
+
+Now add peewee-db-evolve==3.7.0 back into requirements.txt
+
+pip install -r requirements.txt
+
+python migrate.py
