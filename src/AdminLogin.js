@@ -15,35 +15,23 @@ import {
 import { url } from "./App";
 import { UncontrolledAlert } from "react";
 
-// import { useHistory } from "react-router-dom";
-
 export default function Login({ buttonLabel, className }) {
   const {
     name,
     setName,
     password,
     setPassword,
-    modal,
-    setModal,
-    signUp,
-    setSignUp,
-    loggedIn,
     setLoggedIn,
-    toggle,
-    toggleLogIn,
-    toggleStartPage,
-    toggleLoginModal,
-    showLoginModal,
-    setAdminLoggedIn,
+    showAdminModal,
+    toggleAdminModal,
+    toggleAdminLogin,
   } = useContext(SessionContext);
-
-  //   let history = useHistory();
 
   const handleSubmit = (event) => {
     console.log(`Name: ${name}, Password: ${password}`);
     axios({
       method: "POST",
-      url: `${url}/sessions/login`,
+      url: `${url}/sessions/login/admin`,
       data: {
         name: name,
         password: password,
@@ -54,10 +42,9 @@ export default function Login({ buttonLabel, className }) {
         localStorage.setItem("jwt", response.data.auth_token);
         console.log(response.data.Error);
         if (response.data.Error !== "Invalid credentials") {
-          toggleLoginModal();
-          toggleStartPage();
-          toggleLogIn();
-          setAdminLoggedIn(false);
+          toggleAdminModal();
+          toggleAdminLogin();
+          setLoggedIn(false);
         }
       })
       .catch((error) => {
@@ -75,22 +62,22 @@ export default function Login({ buttonLabel, className }) {
   return (
     <div>
       <Modal
-        isOpen={showLoginModal}
-        toggleLoginModal={toggleLoginModal}
+        isOpen={showAdminModal}
+        toggleLoginModal={toggleAdminModal}
         className={className}
       >
-        <ModalHeader toggleLoginModal={toggleLoginModal}>
-          User Login
+        <ModalHeader toggleLoginModal={toggleAdminModal}>
+          Admin Login
         </ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label for="username">Username</Label>
+              <Label for="adminname">Admin Name</Label>
               <Input
                 type="text"
                 name="username"
                 id="username"
-                placeholder="Enter username"
+                placeholder="Enter Name of Admin"
                 onChange={(e) => setName(e.target.value)}
               />
               <Label className="mt-3" for="password">
@@ -100,7 +87,7 @@ export default function Login({ buttonLabel, className }) {
                 type="password"
                 name="password"
                 id="password"
-                placeholder="Enter password"
+                placeholder="Enter Password"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </FormGroup>
@@ -108,9 +95,9 @@ export default function Login({ buttonLabel, className }) {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={() => handleSubmit()}>
-            Login
+            Login Admin
           </Button>
-          <Button color="secondary" onClick={toggleLoginModal}>
+          <Button color="secondary" onClick={toggleAdminModal}>
             Cancel
           </Button>
         </ModalFooter>

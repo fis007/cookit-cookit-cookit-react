@@ -13,85 +13,76 @@ import {
   Input,
 } from "reactstrap";
 import { url } from "./App";
-import { UncontrolledAlert } from "react";
 
-// import { useHistory } from "react-router-dom";
-
-export default function Login({ buttonLabel, className }) {
+export default function SignUp({ buttonLabel, className }) {
   const {
     name,
     setName,
     password,
     setPassword,
-    modal,
-    setModal,
-    signUp,
-    setSignUp,
-    loggedIn,
-    setLoggedIn,
-    toggle,
-    toggleLogIn,
+    email,
+    setEmail,
+    showSignUpModal,
+    toggleSignUpModal,
     toggleStartPage,
-    toggleLoginModal,
-    showLoginModal,
+    setLoggedIn,
     setAdminLoggedIn,
   } = useContext(SessionContext);
 
-  //   let history = useHistory();
+  const handleSubmit = () => {
+    console.log(`Name: ${name}, Email: ${email}, Password: ${password}`);
 
-  const handleSubmit = (event) => {
-    console.log(`Name: ${name}, Password: ${password}`);
     axios({
       method: "POST",
-      url: `${url}/sessions/login`,
+      url: `${url}/users/`,
       data: {
         name: name,
+        email: email,
         password: password,
       },
     })
       .then((response) => {
-        console.log(response.data);
-        localStorage.setItem("jwt", response.data.auth_token);
-        console.log(response.data.Error);
-        if (response.data.Error !== "Invalid credentials") {
-          toggleLoginModal();
+        console.log(response.data.status);
+        if (response.data.status === "success") {
+          toggleSignUpModal();
           toggleStartPage();
-          toggleLogIn();
+          setLoggedIn(true);
           setAdminLoggedIn(false);
         }
       })
       .catch((error) => {
-        console.error(error.response);
-        return (
-          <div>
-            <UncontrolledAlert color="danger">
-              Incorrect username or password!
-            </UncontrolledAlert>
-          </div>
-        );
+        console.error(error.response); // so that we know what went wrong if the request failed
       });
   };
 
   return (
     <div>
       <Modal
-        isOpen={showLoginModal}
-        toggleLoginModal={toggleLoginModal}
+        isOpen={showSignUpModal}
+        toggleSignUpModal={toggleSignUpModal}
         className={className}
       >
-        <ModalHeader toggleLoginModal={toggleLoginModal}>
-          User Login
-        </ModalHeader>
+        <ModalHeader toggleSignUpModal={toggleSignUpModal}>Sign Up</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label for="username">Username</Label>
+              <Label for="name">Username</Label>
               <Input
                 type="text"
-                name="username"
-                id="username"
+                name="name"
+                id="name"
                 placeholder="Enter username"
                 onChange={(e) => setName(e.target.value)}
+              />
+              <Label className="mt-3" for="email">
+                Email
+              </Label>
+              <Input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Enter email"
+                onChange={(e) => setEmail(e.target.value)}
               />
               <Label className="mt-3" for="password">
                 Password
@@ -108,9 +99,9 @@ export default function Login({ buttonLabel, className }) {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={() => handleSubmit()}>
-            Login
+            Sign Up
           </Button>
-          <Button color="secondary" onClick={toggleLoginModal}>
+          <Button color="secondary" onClick={toggleSignUpModal}>
             Cancel
           </Button>
         </ModalFooter>

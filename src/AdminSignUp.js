@@ -13,85 +13,87 @@ import {
   Input,
 } from "reactstrap";
 import { url } from "./App";
-import { UncontrolledAlert } from "react";
 
 // import { useHistory } from "react-router-dom";
 
-export default function Login({ buttonLabel, className }) {
+export default function AdminSignUp({ buttonLabel, className }) {
   const {
     name,
     setName,
     password,
     setPassword,
-    modal,
-    setModal,
+    email,
+    setEmail,
     signUp,
     setSignUp,
-    loggedIn,
-    setLoggedIn,
-    toggle,
-    toggleLogIn,
+    toggleSignUp,
+    showSignUpModal,
+    toggleSignUpModal,
     toggleStartPage,
-    toggleLoginModal,
-    showLoginModal,
+    toggleLogIn,
+    setLoggedIn,
     setAdminLoggedIn,
+    toggleAdminSignUpModal,
+    showAdminSignUpModal,
   } = useContext(SessionContext);
 
   //   let history = useHistory();
 
-  const handleSubmit = (event) => {
-    console.log(`Name: ${name}, Password: ${password}`);
+  const handleSubmit = () => {
+    console.log(`Name: ${name}, Email: ${email}, Password: ${password}`);
+
     axios({
       method: "POST",
-      url: `${url}/sessions/login`,
+      url: `${url}/admins/`,
       data: {
         name: name,
+        email: email,
         password: password,
       },
     })
       .then((response) => {
-        console.log(response.data);
-        localStorage.setItem("jwt", response.data.auth_token);
-        console.log(response.data.Error);
-        if (response.data.Error !== "Invalid credentials") {
-          toggleLoginModal();
-          toggleStartPage();
-          toggleLogIn();
-          setAdminLoggedIn(false);
+        console.log(response.data.status);
+        if (response.data.status === "success") {
+          toggleAdminSignUpModal();
+          setAdminLoggedIn(true);
+          setLoggedIn(false);
         }
       })
       .catch((error) => {
-        console.error(error.response);
-        return (
-          <div>
-            <UncontrolledAlert color="danger">
-              Incorrect username or password!
-            </UncontrolledAlert>
-          </div>
-        );
+        console.error(error.response); // so that we know what went wrong if the request failed
       });
   };
 
   return (
     <div>
       <Modal
-        isOpen={showLoginModal}
-        toggleLoginModal={toggleLoginModal}
+        isOpen={showAdminSignUpModal}
+        toggleSignUpModal={toggleAdminSignUpModal}
         className={className}
       >
-        <ModalHeader toggleLoginModal={toggleLoginModal}>
-          User Login
+        <ModalHeader toggleSignUpModal={toggleAdminSignUpModal}>
+          Admin Sign Up
         </ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label for="username">Username</Label>
+              <Label for="name">Username</Label>
               <Input
                 type="text"
-                name="username"
-                id="username"
+                name="name"
+                id="name"
                 placeholder="Enter username"
                 onChange={(e) => setName(e.target.value)}
+              />
+              <Label className="mt-3" for="email">
+                Email
+              </Label>
+              <Input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Enter email"
+                onChange={(e) => setEmail(e.target.value)}
               />
               <Label className="mt-3" for="password">
                 Password
@@ -108,9 +110,9 @@ export default function Login({ buttonLabel, className }) {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={() => handleSubmit()}>
-            Login
+            Sign Up
           </Button>
-          <Button color="secondary" onClick={toggleLoginModal}>
+          <Button color="secondary" onClick={toggleAdminSignUpModal}>
             Cancel
           </Button>
         </ModalFooter>

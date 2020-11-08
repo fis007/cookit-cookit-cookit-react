@@ -21,11 +21,7 @@ export default function Meal({ meal }) {
           </CardSubtitle>
           <CardText>
             Cookware required:
-            <ul>
-              {meal.cookware.map((ware) => {
-                return <li>{ware}</li>;
-              })}
-            </ul>
+            {meal.cookware}
           </CardText>
           <Button>Order now</Button>
         </CardBody>
