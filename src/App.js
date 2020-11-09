@@ -10,7 +10,9 @@ import AdminPage from "./AdminPage";
 import AdminSignUp from "./AdminSignUp";
 import AddMeal from "./AddMeal";
 
-export const url = "http://127.0.0.1:5000/api/v1";
+// export const url = "http://127.0.0.1:5000/api/v1";
+
+export const url = "https://cookit-cookit-cookit.herokuapp.com/api/v1";
 
 function App() {
   const [name, setName] = useState();

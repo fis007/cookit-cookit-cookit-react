@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import axios from "axios";
 import SessionContext from "./contexts/SessionContext";
 import {
@@ -31,9 +31,24 @@ export default function AddMeal({ buttonLabel, className }) {
     cookware,
     imgUrl,
     setUrl,
+    meals,
+    setMeals,
   } = useContext(SessionContext);
 
-  //   let history = useHistory();
+  useEffect(() => {
+    // performing a GET request
+    axios
+      .get(`${url}/meals`)
+      .then((result) => {
+        // If successful, we do stuffs with 'result'
+        console.log(result.data);
+        setMeals(result.data);
+      })
+      .catch((error) => {
+        // If unsuccessful, we notify users what went wrong
+        console.log("ERROR: ", error);
+      });
+  }, [showAddMealModal]);
 
   const handleSubmit = () => {
     console.log(
