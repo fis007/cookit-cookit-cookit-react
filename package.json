@@ -36,5 +36,18 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "showAddMealModal toggleShowAddMealModal setIngredients setPrepTime setCookware ingredients",
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fis007/cookit-cookit-cookit-react.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fis007/cookit-cookit-cookit-react/issues"
+  },
+  "homepage": "https://github.com/fis007/cookit-cookit-cookit-react#readme"
 }
